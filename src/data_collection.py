@@ -37,9 +37,9 @@ LEAGUE_ID = 39  # Premier League on api-football
 
 PL_TEAMS_2025 = [
     "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton",
-    "Chelsea", "Crystal Palace", "Everton", "Fulham", "Ipswich Town",
-    "Leicester City", "Liverpool", "Manchester City", "Manchester United",
-    "Newcastle United", "Nottingham Forest", "Southampton", "Tottenham",
+    "Burnley", "Chelsea", "Crystal Palace", "Everton", "Fulham",
+    "Leeds United", "Liverpool", "Manchester City", "Manchester United",
+    "Newcastle United", "Nottingham Forest", "Sunderland", "Tottenham",
     "West Ham", "Wolves",
 ]
 
@@ -110,25 +110,25 @@ class SyntheticDataGenerator:
         # Relative strengths (higher = stronger attack/defense)
         self.team_strength = {
             "Manchester City":  {"attack": 0.95, "defense": 0.90},
-            "Liverpool":        {"attack": 0.92, "defense": 0.88},
-            "Arsenal":          {"attack": 0.88, "defense": 0.87},
-            "Chelsea":          {"attack": 0.82, "defense": 0.80},
-            "Manchester United": {"attack": 0.78, "defense": 0.75},
-            "Tottenham":        {"attack": 0.80, "defense": 0.74},
-            "Newcastle United": {"attack": 0.79, "defense": 0.78},
-            "Aston Villa":      {"attack": 0.77, "defense": 0.76},
-            "Brighton":         {"attack": 0.73, "defense": 0.70},
-            "West Ham":         {"attack": 0.68, "defense": 0.67},
-            "Wolves":           {"attack": 0.65, "defense": 0.64},
-            "Fulham":           {"attack": 0.66, "defense": 0.65},
-            "Brentford":        {"attack": 0.67, "defense": 0.66},
-            "Crystal Palace":   {"attack": 0.63, "defense": 0.62},
-            "Nottingham Forest": {"attack": 0.62, "defense": 0.68},
-            "Bournemouth":      {"attack": 0.64, "defense": 0.63},
-            "Everton":          {"attack": 0.60, "defense": 0.59},
-            "Leicester City":   {"attack": 0.61, "defense": 0.58},
-            "Southampton":      {"attack": 0.55, "defense": 0.52},
-            "Ipswich Town":     {"attack": 0.56, "defense": 0.55},
+            "Liverpool":        {"attack": 0.93, "defense": 0.89},
+            "Arsenal":          {"attack": 0.89, "defense": 0.88},
+            "Chelsea":          {"attack": 0.83, "defense": 0.80},
+            "Tottenham":        {"attack": 0.81, "defense": 0.75},
+            "Manchester United": {"attack": 0.78, "defense": 0.74},
+            "Newcastle United": {"attack": 0.79, "defense": 0.79},
+            "Aston Villa":      {"attack": 0.78, "defense": 0.77},
+            "Brighton":         {"attack": 0.74, "defense": 0.72},
+            "Nottingham Forest": {"attack": 0.65, "defense": 0.72},
+            "Fulham":           {"attack": 0.67, "defense": 0.66},
+            "Brentford":        {"attack": 0.68, "defense": 0.67},
+            "West Ham":         {"attack": 0.67, "defense": 0.65},
+            "Crystal Palace":   {"attack": 0.63, "defense": 0.63},
+            "Bournemouth":      {"attack": 0.65, "defense": 0.63},
+            "Everton":          {"attack": 0.61, "defense": 0.60},
+            "Wolves":           {"attack": 0.63, "defense": 0.62},
+            "Leeds United":     {"attack": 0.68, "defense": 0.64},
+            "Burnley":          {"attack": 0.60, "defense": 0.59},
+            "Sunderland":       {"attack": 0.59, "defense": 0.58},
         }
 
     def _simulate_match(
