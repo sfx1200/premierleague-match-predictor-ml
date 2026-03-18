@@ -5,7 +5,6 @@ Premier League 2025-26 Match Predictor Dashboard
 import sys
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -592,7 +591,7 @@ elif page == "Team Stats":
         (m1, "Points",        pts,    f"{total} played",              tc),
         (m2, "Wins",          wins,   f"{wins/total*100:.0f}% rate",  "#4ec97a"),
         (m3, "Draws",         draws,  f"{draws/total*100:.0f}% rate", "#f6c343"),
-        (m4, "Losses",        losses, f"{losses/total*100:.0f}% rate","#e05555"),
+        (m4, "Losses",        losses, f"{losses/total*100:.0f}% rate", "#e05555"),
         (m5, "Goals Scored",  gf,     f"{gf/total:.2f} per game",     "#5b9bd5"),
         (m6, "Clean Sheets",  cs,     f"{cs/total*100:.0f}% games",   "#8867c0"),
     ]:
@@ -620,7 +619,7 @@ elif page == "Team Stats":
                 line=dict(color=tc, width=2),
                 marker=dict(size=5, color=tc, line=dict(color="#0b0f1a", width=1.5)),
                 fill="tozeroy",
-                fillcolor=f"rgba({int(tc[1:3],16)},{int(tc[3:5],16)},{int(tc[5:7],16)},0.08)",
+                fillcolor=f"rgba({int(tc[1:3], 16)},{int(tc[3:5], 16)},{int(tc[5:7], 16)},0.08)",
                 name="Form",
             ))
             fig.update_layout(**PLOTLY_BASE, height=240, yaxis_title="Pts (last 5)", xaxis_title="")
@@ -751,17 +750,25 @@ elif page == "Table":
     """, unsafe_allow_html=True)
 
     def zone_color(i):
-        if i <= 4:   return "rgba(91,155,213,0.12)"
-        if i == 5:   return "rgba(246,195,67,0.10)"
-        if i == 6:   return "rgba(78,201,122,0.10)"
-        if i >= 18:  return "rgba(224,85,85,0.10)"
+        if i <= 4:
+            return "rgba(91,155,213,0.12)"
+        if i == 5:
+            return "rgba(246,195,67,0.10)"
+        if i == 6:
+            return "rgba(78,201,122,0.10)"
+        if i >= 18:
+            return "rgba(224,85,85,0.10)"
         return "rgba(17,24,39,0.9)"
 
     def font_color(i):
-        if i <= 4:   return "#5b9bd5"
-        if i == 5:   return "#f6c343"
-        if i == 6:   return "#4ec97a"
-        if i >= 18:  return "#e05555"
+        if i <= 4:
+            return "#5b9bd5"
+        if i == 5:
+            return "#f6c343"
+        if i == 6:
+            return "#4ec97a"
+        if i >= 18:
+            return "#e05555"
         return "#dde3f0"
 
     fill_colors  = [zone_color(i) for i in range(1, len(table) + 1)]
