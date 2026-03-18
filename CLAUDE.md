@@ -10,3 +10,5 @@ Follow this pattern every time:
 3. `git push` to `origin main`
 
 Use conventional commit prefixes: `feat:`, `fix:`, `ci:`, `docs:`, `refactor:`, `test:`
+
+**Never add `Co-Authored-By` lines to commit messages.**
