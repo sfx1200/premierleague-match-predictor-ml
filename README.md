@@ -1,20 +1,83 @@
+<div align="center">
+
 # Premier League Match Predictor
 
-A machine learning system that predicts Premier League match outcomes — **Home Win**, **Draw**, or **Away Win** — using XGBoost and Random Forest classifiers.
+**End-to-end ML system that predicts Premier League 2025-26 match outcomes using XGBoost & Random Forest**
 
-The project covers the full data science workflow: data generation, feature engineering, model training, a REST API, and an interactive dashboard.
+[![CI](https://github.com/sfx1200/football-predict-ml/actions/workflows/ci.yml/badge.svg)](https://github.com/sfx1200/football-predict-ml/actions/workflows/ci.yml)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Live%20App-FF4B4B?logo=streamlit&logoColor=white)](https://sfx1200-football-predict-ml.streamlit.app)
+[![XGBoost](https://img.shields.io/badge/XGBoost-2.0-orange)](https://xgboost.readthedocs.io)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](./docker-compose.yml)
+
+### [🚀 Open Live Dashboard →](https://sfx1200-football-predict-ml.streamlit.app)
+
+</div>
 
 ---
 
 ## What it does
 
-Given any two Premier League teams, the system predicts the most likely outcome and returns the probabilities for each result. It uses features like:
+Given any two Premier League clubs, the system returns win/draw/loss probabilities using engineered features like rolling form, head-to-head record, shot conversion rate, and home advantage. Two models are available — XGBoost and Random Forest — both trained with time-series cross-validation to avoid data leakage.
 
-- Rolling form over the last 5 matches
-- Average goals scored and conceded
-- Head-to-head win rate (last 5 meetings)
-- Shot conversion rate
-- Home advantage indicator
+The project covers the complete data science workflow:
+
+```
+Raw match data → Cleaning → Feature engineering → Training → REST API + Interactive dashboard
+```
+
+---
+
+## Dashboard
+
+Five pages accessible from the sidebar:
+
+| Page | Content |
+|------|---------|
+| **Overview** | Season stats, fixture counts, home/away win rates, result distribution |
+| **Predict** | Pick two teams, pick a model — get probabilities + recent form badges |
+| **Team Stats** | Points, wins, clean sheets, goals, form trend, shot conversion per club |
+| **Model Insights** | Confusion matrices, feature importance, model comparison charts |
+| **Table** | Full standings with Champions League / Europa / relegation zone highlights |
+
+---
+
+## Tech stack
+
+| Layer | Tools |
+|-------|-------|
+| **ML** | scikit-learn · XGBoost · pandas · numpy |
+| **API** | FastAPI · uvicorn · Pydantic |
+| **Dashboard** | Streamlit · Plotly |
+| **Infra** | Docker · Docker Compose · GitHub Actions |
+| **Testing** | pytest · pytest-cov · flake8 · black |
+
+---
+
+## ML features
+
+| Feature | Description |
+|---------|-------------|
+| `home_form` / `away_form` | Points in last 5 matches |
+| `home_avg_scored` / `away_avg_scored` | Rolling average goals scored |
+| `home_avg_conceded` / `away_avg_conceded` | Rolling average goals conceded |
+| `home_conversion_rate` | Shots on target ÷ shots taken |
+| `form_diff` | Rolling form differential (home − away) |
+| `h2h_win_rate` | Home team win rate in last 5 H2H meetings |
+| `home_goal_diff` | Rolling goal difference |
+| `home_advantage` | Binary home-side indicator |
+
+---
+
+## Model performance
+
+| Model | CV accuracy |
+|-------|-------------|
+| XGBoost | 52 – 58% |
+| Random Forest | 50 – 55% |
+
+Football prediction is inherently noisy — top bookmakers sit around 55-60%. Results are in a realistic range given the synthetic training data.
 
 ---
 
@@ -22,83 +85,57 @@ Given any two Premier League teams, the system predicts the most likely outcome 
 
 ```
 football_predict_ml/
-├── data/
-│   ├── raw/                  # Match data (CSV + JSON)
-│   └── processed/            # Cleaned data and feature matrix
 ├── src/
-│   ├── data_collection.py    # Generate or fetch match data
-│   ├── data_cleaning.py      # Validate and normalize raw data
-│   ├── feature_engineering.py  # Build ML features
-│   ├── train_model.py        # Train and tune models
-│   ├── evaluate_model.py     # Metrics and plots
-│   ├── visualize.py          # Standalone charts
-│   └── predict.py            # Inference class
+│   ├── data_collection.py      # Generate / fetch match data
+│   ├── data_cleaning.py        # Validate and normalise
+│   ├── feature_engineering.py  # Rolling stats, H2H, form
+│   ├── train_model.py          # Train + hyperparameter search
+│   ├── evaluate_model.py       # Metrics and plots
+│   └── predict.py              # Inference class
 ├── api/
-│   └── main.py               # FastAPI prediction service
+│   └── main.py                 # FastAPI: /predict, /predict/batch
 ├── dashboard/
-│   └── app.py                # Streamlit dashboard
-├── models/                   # Saved models and evaluation plots
-├── tests/                    # pytest test suite
-├── run_pipeline.py           # Run the full pipeline in one command
+│   └── app.py                  # Streamlit multi-page dashboard
+├── data/processed/             # Cleaned data and feature matrix
+├── models/                     # Trained models + evaluation plots
+├── tests/                      # pytest suite (data, features, API)
+├── streamlit_app.py            # Streamlit Cloud entry point
+├── run_pipeline.py             # Run full pipeline in one command
 ├── docker-compose.yml
 └── requirements.txt
 ```
 
 ---
 
-## Getting started
-
-### 1. Install dependencies
+## Quick start
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate       # Windows: .venv\Scripts\activate
+# 1. Clone and install
+git clone https://github.com/sfx1200/football-predict-ml.git
+cd football-predict-ml
 pip install -r requirements.txt
-```
 
-### 2. Run the full pipeline
-
-```bash
+# 2. Run the full pipeline (data → clean → features → train → evaluate)
 python run_pipeline.py
+
+# 3. Dashboard
+streamlit run dashboard/app.py
+# Open http://localhost:8501
+
+# 4. REST API (separate terminal)
+uvicorn api.main:app --reload
+# Open http://localhost:8000/docs
 ```
 
-This single command runs all five steps in order:
-
-1. **Data generation** — creates 300 simulated Premier League fixtures with realistic stats (goals, shots, possession) based on team strength ratings. If you have a `FOOTBALL_DATA_API_KEY` in a `.env` file it will fetch live data instead.
-2. **Data cleaning** — validates types, removes duplicates, standardises team names.
-3. **Feature engineering** — builds rolling stats, H2H records, and form metrics for each match.
-4. **Model training** — trains Random Forest and XGBoost with time-series cross-validation and hyperparameter search.
-5. **Evaluation** — generates confusion matrices, feature importance charts, and a model comparison, saved to `models/plots/`.
-
-### 3. Open the dashboard
+### Docker
 
 ```bash
-streamlit run dashboard/app.py
+docker-compose up   # API on :8000, dashboard on :8501
 ```
-
-Then open **http://localhost:8501**
-
----
-
-## Dashboard pages
-
-| Page | What you'll find |
-|---|---|
-| **Overview** | Season stats: total fixtures, home/away win rates, goals per matchday, result distribution |
-| **Predict** | Pick two teams, choose a model, and get win/draw/loss probabilities with recent form shown |
-| **Team Stats** | Points, wins, clean sheets, goal averages, form trend, conversion rate per team |
-| **Model Insights** | Confusion matrices, feature importance rankings, model comparison charts |
-| **Table** | Simulated standings with Champions League, Europa, and relegation zones highlighted |
 
 ---
 
 ## REST API
-
-Start the API server:
-
-```bash
-uvicorn api.main:app --reload
-```
 
 **Predict a match:**
 
@@ -107,8 +144,6 @@ curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" \
   -d '{"home_team": "Arsenal", "away_team": "Liverpool"}'
 ```
-
-Response:
 
 ```json
 {
@@ -122,60 +157,7 @@ Response:
 }
 ```
 
-Interactive API docs: **http://localhost:8000/docs**
-
-You can also send batch predictions to `POST /predict/batch`.
-
----
-
-## Teams (2025-26 season)
-
-The dataset reflects the current Premier League season, with the three promoted clubs from the 2024-25 Championship:
-
-| Clubs | |
-|---|---|
-| Arsenal · Aston Villa · Bournemouth | Brentford · Brighton · Burnley |
-| Chelsea · Crystal Palace · Everton | Fulham · Leeds United · Liverpool |
-| Manchester City · Manchester United | Newcastle · Nottingham Forest |
-| Sunderland · Tottenham · West Ham | Wolves |
-
----
-
-## ML features
-
-| Feature | Description |
-|---|---|
-| `home_form` / `away_form` | Points earned in last 5 matches |
-| `home_avg_scored` / `away_avg_scored` | Rolling average goals scored |
-| `home_avg_conceded` / `away_avg_conceded` | Rolling average goals conceded |
-| `home_conversion_rate` | Shots on target ÷ shots taken |
-| `form_diff` | Difference in rolling form (home − away) |
-| `h2h_win_rate` | Home team's win rate in last 5 H2H meetings |
-| `home_goal_diff` | Rolling goal difference |
-| `home_advantage` | Binary flag (always 1 for home side) |
-
----
-
-## Model performance
-
-| Model | CV accuracy (typical) |
-|---|---|
-| XGBoost | 52 – 58% |
-| Random Forest | 50 – 55% |
-
-Football match prediction is an inherently hard problem — top bookmakers sit around 55-60%. These numbers are in a reasonable range given that the training data is synthetic.
-
----
-
-## Docker
-
-```bash
-# Start everything (API on :8000, dashboard on :8501)
-docker-compose up
-
-# API only
-docker-compose up api
-```
+Batch predictions: `POST /predict/batch` · Interactive docs: `GET /docs`
 
 ---
 
@@ -187,6 +169,6 @@ pytest tests/ -v --cov=src --cov-report=term-missing
 
 ---
 
-## Tech stack
+## Teams (2025-26)
 
-Python 3.11 · pandas · scikit-learn · XGBoost · FastAPI · Streamlit · Plotly · Docker
+Arsenal · Aston Villa · Bournemouth · Brentford · Brighton · Burnley · Chelsea · Crystal Palace · Everton · Fulham · Leeds United · Liverpool · Manchester City · Manchester United · Newcastle · Nottingham Forest · Sunderland · Tottenham · West Ham · Wolves

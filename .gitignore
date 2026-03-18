@@ -39,18 +39,13 @@ venv.bak/
 *.env
 secrets.json
 
-# Data (large files)
+# Data (large raw files only)
 data/raw/*.csv
 data/raw/*.json
-data/processed/*.csv
-data/processed/*.parquet
 !data/raw/.gitkeep
-!data/processed/.gitkeep
 
-# Models
+# Models — keep joblib files for Streamlit Cloud deployment
 models/*.pkl
-models/*.joblib
-models/*.json
 !models/.gitkeep
 
 # Jupyter
